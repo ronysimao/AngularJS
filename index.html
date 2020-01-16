@@ -38,6 +38,28 @@
                 { nome: "Ana", telefone: "99997777" },
                 { nome: "Maria", telefone: "99996666" }
             ];
+            //Linha abaixo referente ao 1º e 2º Modo
+            //$scope.adicionarContato = function (nome, telefone) {
+            $scope.adicionarContato = function (contato) {
+                //console.log($scope.nome); apenas para imprimir o resultado do inputtext no console
+                /* 
+                Evitar ao máximo ler o $scope dentro do Controller
+                Quando, existe o sinal de '=' dentro do Controller, informa que eu estou
+                     escrevendo dentro do mesmo, já quando existe um '$scope.' alguma coisa,
+                     aí eu estou LENDO e é o que não se deve fazer
+                Perde-se clareza no código p.ex.: 
+                        1º Modo
+                            $scope.contatos.push({ nome: $scope.nome, telefone: $scope.telefone });
+                        2º Modo
+                            $scope.contatos.push({ nome: nome, telefone: telefone });        
+                */
+                // Deixando o código como está na linha abaixo, funciona, mas se
+                // começarmos a apagar tanto nome como contato, ele apaga dos inputtexts 
+                // e também da tabela
+                // $scope.contatos.push(contato);
+                $scope.contatos.push(angular.copy(contato));
+                delete $scope.contato; //esta linha, apaga o que está nos inputs, após a inclusão na tabela
+            };
         });
     </script>
 
@@ -66,10 +88,18 @@
             </tr>
         </table>
         <hr />
-        <input class="form-control" type="text" ng-model="nome" />
-        <input class="form-control" type="text" ng-model="telefone" />
-        {{nome}}
-        {{telefone}}
+        <!-- As duas linhas abaixo referem-se ao 1º e 2º Modo -->
+        <!-- <input class="form-control" type="text" ng-model="nome" placeholder="Nome"/>
+        <input class="form-control" type="text" ng-model="telefone" placeholder="Telefone"/> -->
+
+        <!-- Já as duas linhas abaixo, usam o 'contato.' como forma de abstração da entidade "contato" -->
+        <input class="form-control" type="text" ng-model="contato.nome" placeholder="Nome"/>
+        <input class="form-control" type="text" ng-model="contato.telefone" placeholder="Telefone"/>
+        <br>
+        <!-- A linha abaixo refere-se ao 1º e 2º Modo -->
+        <!-- <button class="btn btn-primary btn-block" ng-click="adicionarContato(nome, telefone)">Adicionar contato</button> -->
+        {{contato}}
+        <button class="btn btn-primary btn-block" ng-click="adicionarContato(contato)">Adicionar contato</button>
     </div>
 </body>
 
